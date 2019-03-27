@@ -1,3 +1,6 @@
+<?php
+include_once("configure.inc.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,18 +34,9 @@
         <fieldset>
             <legend>10 derniers messages</legend>
             <?php
-                $host = "localhost";
-                $dbName = "minichat";
-                $username = "root";
-                $passwd = "";
+
                 try {
-
-                    $bdd = new PDO("mysql:host=$host;dbname=$dbName",
-                        $username,
-                        $passwd,
-                        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
                     $lastMessages = $bdd->query("SELECT pseudo, message FROM messages ORDER BY id DESC LIMIT 10");
-
                     while ($message = $lastMessages->fetch()) {
                         echo "<p><strong>" . htmlspecialchars($message['pseudo']) . "</strong>
                                 : " . htmlspecialchars($message['message']) . "</p>";
