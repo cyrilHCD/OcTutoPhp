@@ -7,7 +7,7 @@ include_once("configure.inc.php");
     <meta charset="UTF-8">
     <title>Mon Chat</title>
     <style>
-        form
+        #formulaire
         {
             text-align: center;
         }
@@ -15,11 +15,12 @@ include_once("configure.inc.php");
 </head>
 <body>
     <form action="minichat_post.php" method="post">
-        <fieldset>
+        <fieldset id="formulaire">
             <legend>Entrez votre pseudo et votre message</legend>
             <p>
                 <label for="pseudo">Pseudo :
-                    <input type="text" name="pseudo" id="pseudo" maxlength="50" required>
+                    <input type="text" name="pseudo" id="pseudo" maxlength="50"
+                           value="<?php echo isset($_GET["pseudo"]) ? htmlspecialchars($_GET["pseudo"]) : "";?>" required>
                 </label>
             </p>
             <p>
@@ -36,9 +37,9 @@ include_once("configure.inc.php");
             <?php
 
                 try {
-                    $lastMessages = $bdd->query("SELECT pseudo, message FROM messages ORDER BY id DESC LIMIT 10");
+                    $lastMessages = $bdd->query("SELECT pseudo, message,DATE_FORMAT(date_message, '%d/%m/%y') as jour, DATE_FORMAT(date_message, '%Hh%imin%ss') as heure  FROM messages ORDER BY id DESC LIMIT 10");
                     while ($message = $lastMessages->fetch()) {
-                        echo "<p><strong>" . htmlspecialchars($message['pseudo']) . "</strong>
+                        echo "<p><em>Posté le " . $message['jour'] . " à " . $message['heure'] . "</em>&nbsp;<strong>" . htmlspecialchars($message['pseudo']) . "</strong>
                                 : " . htmlspecialchars($message['message']) . "</p>";
                     }
                 } catch (Exception $e) {
