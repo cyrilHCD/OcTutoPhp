@@ -25,19 +25,22 @@ include_once("configure.inc.php")
                 $sql.= "FROM billets ";
                 $sql.= "WHERE id = " . $_GET["id"];
                 $billet = $bdd->query($sql);
-                $billet = $billet->fetch();
-                $encoding = mb_detect_encoding($billet['titre'], "UTF-8,ISO-8859-1");
-                $titre = iconv($encoding, "UTF-8", $billet['titre']);
-                $encoding = mb_detect_encoding($billet['contenu'], "UTF-8,ISO-8859-1");
-                $contenu = iconv($encoding, "UTF-8", $billet['contenu']);
+                $monBillet = $billet->fetch();
+                $encoding = mb_detect_encoding($monBillet['titre'], "UTF-8,ISO-8859-1");
+                $titre = iconv($encoding, "UTF-8", $monBillet['titre']);
+                $encoding = mb_detect_encoding($monBillet['contenu'], "UTF-8,ISO-8859-1");
+                $contenu = iconv($encoding, "UTF-8", $monBillet['contenu']);
                 ?>
                 <div class='news'>
-                    <h3><?php echo mb_convert_encoding ($titre, "UTF-8") . " le " . $billet['jour'] . " à " . $billet['heure']; ?></h3>
+                    <h3><?php echo mb_convert_encoding ($titre, "UTF-8")
+                            . " le " . $monBillet['jour'] . " à " . $monBillet['heure']; ?></h3>
                     <p>
                         <?php echo $contenu . "<br>"; ?>
                     </p>
                 </div>
                 <h2>Commentaires</h2><?php
+
+                $billet->closeCursor();
 
                 $sql = "SELECT auteur, commentaire, DATE_FORMAT(date_commentaire, '%d/%m/%y') as jour, ";
                 $sql.= "DATE_FORMAT(date_commentaire, '%Hh%imin%ss') as heure ";
@@ -59,6 +62,7 @@ include_once("configure.inc.php")
                     </p>
                     <?php
                 }
+                $commentaires->closeCursor();
 
             } catch (Exception $e) {
                 echo "Erreur : " . $e->getMessage();

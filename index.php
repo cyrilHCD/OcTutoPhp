@@ -27,11 +27,12 @@ include_once("configure.inc.php")
                 <div class='news'>
                     <h3><?php echo mb_convert_encoding ($titre, "UTF-8") . " le " . $billet['jour'] . " à " . $billet['heure']; ?></h3>
                     <p>
-                        <?php echo $contenu . "<br>"; ?>
+                        <?php echo nl2br($contenu) . "<br>"; ?>
                         <a href="commentaires.php?id=<?php echo $billet['id']; ?>">Commentaires</a>
                     </p>
                 </div><?php
             }
+            $derniersBillets->closeCursor();
 
         } catch (Exception $e) {
             echo "Erreur : " . $e->getMessage();
